@@ -1,5 +1,3 @@
-# Enhanced CodeQL Workflow for Metrics and Custom Queries
-
 name: "CodeQL Advanced"
 
 on:
@@ -27,10 +25,6 @@ jobs:
         - language: java-kotlin
           build-mode: none
 
-    env:
-      # Enables debug logging for more detailed output in GitHub Actions logs
-      ACTIONS_STEP_DEBUG: true
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -42,9 +36,9 @@ jobs:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
         queries: |
-          +security-extended,security-and-quality
-          ./custom-queries/metrics/lines-of-code.ql
-          ./custom-queries/metrics/cyclomatic-complexity.ql
+          +security-and-quality
+        packs:
+          - ./custom-queries/metrics/
 
     - if: matrix.build-mode == 'manual'
       shell: bash
@@ -52,15 +46,13 @@ jobs:
         echo 'Performing manual build for Java-based projects...'
         ./gradlew build
 
-    # Runs the CodeQL analysis
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
-        upload: true # Upload results to GitHub Security tab
+        upload: true
 
-    # # Upload CodeQL Database for further offline analysis
-    # - name: Upload CodeQL Database
-    #   uses: github/codeql-action/upload-database@v3
-    #   with:
-    #     path: my-codeql-database
+    - name: Upload CodeQL Database
+      uses: github/codeql-action/upload-database@v3
+      with:
+        path: my-codeql-database
