@@ -49,7 +49,7 @@ jobs:
         category: "/language:${{matrix.language}}"
         upload: true
 
-    - name: Upload CodeQL Database
-      uses: github/codeql-action/upload-database@v3
-      with:
-        path: my-codeql-database
+    # - name: Upload CodeQL Database
+    #   uses: github/codeql-action/upload-database@v3
+    #   with:
+    #     path: my-codeql-database
