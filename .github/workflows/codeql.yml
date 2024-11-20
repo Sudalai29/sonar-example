@@ -90,3 +90,6 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
+        upload: true # Ensures results are uploaded to GitHub Security tab
+        metrics: true 
+        verbosity: debug 
